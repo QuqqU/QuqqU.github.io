@@ -1,10 +1,10 @@
 ---
 layout: page
-title: About Us
+title: About
 description: 난데요?
 ---
 
 
-## About Us
+## About
 
 나다 나라고
