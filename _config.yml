@@ -2,11 +2,11 @@
 title: QuqqU
 description: "QuqqU's Blog"
 url: "http://www.QuqqU.github.io/"
-#ogimage: "img/default-ogimage.png"
+ogimage: "img/favicon.png"
 author:
   name: "QuqqU"
   email: "rldnd913@naver.com"
-#  url: "https://thereviewindex.com"
+  url: "https://QuqqU.github.io"
 
 
 # Build settings
