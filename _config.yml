@@ -1,12 +1,12 @@
 # Site settings
 title: QuqqU
 description: "QuqqU's Blog"
-url: "http://www.thereviewindex.github.io/blog"
+url: "http://www.QuqqU.github.io/"
 ogimage: "img/default-ogimage.png"
 author:
   name: "QuqqU"
   email: "rldnd913@naver.com"
-  url: "https://thereviewindex.com"
+#  url: "https://thereviewindex.com"
 
 
 # Build settings
