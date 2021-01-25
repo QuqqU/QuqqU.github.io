@@ -1,0 +1,42 @@
+---
+title: QuqqU - 블로그 구축기(1)
+description: 블로그 구축기(1)
+header: 블로그 구축기(1) - 뼈대 만들기
+duration: 6 minutes read
+---
+
+## bootstrap
+React, Vue등을 이용해 프론트를 만들면 좋지만, 디자이너와 협업자없이 홀로 만들기는 어려운 편이다.
+
+마침 이런 애로사항을 위한 오픈소스 라이브러리가 있다. 바로 [bootstrap(부트스트랩)](https://getbootstrap.com)이다.
+
+프론트를 잘 모르더라도 최소의 노력으로 적당히 예쁜 프론트를 꾸밀 수 있다.
+
+### free bootstrap themes download site
+- https://startbootstrap.com/
+- https://www.bootstrapzero.com/
+- http://bootswatch.com/
+
+위 사이트들과 같이 무료로 부트스트랩 테마를 다운로드 받을 수 있는 곳도 있다. 웹을 처음 개발하는 웹린이라면, 웹개발의 문턱을 낮춰주는 매우 좋은 도구이다. 다만 부트스트랩으로 만든 사이트는 약간 티가 나는 편이여서, 추후에 적당히 바꿔주는 편이 좋겠다.
+
+내 블로그도 이 부트스트랩을 이용할 예정이다.(나도 웹린이)
+
+## Github Blog
+github는 pages 기능을 이용해 정적인 페이지를 호스팅할 수 있게해준다. 물론 나는 동적인 페이지를 호스팅할 예정이기 때문에 해당사항이 없지만, 깃허브 블로그는 *markdown* 파일을 이용해 포스팅을 저장한다. markdown 에디터를 블로그에 넣는다면, 블로그에 포스팅하기가 수월해질 것 같아서 이 형태를 이용하기로 했다.
+
+
+## Markdown
+[markdown 설명과 사용법(-꺼-나무위키)](https://namu.wiki/w/마크다운)
+
+## Simplemde
+- [simplemde.com](https://simplemde.com)
+- [github](https://github.com/sparksuite/simplemde-markdown-editor)
+
+매우 쓸만한 오픈소스 마크다운 에디터이다. simplemde.min.css와 simplemde.min.js 파일을 다운받는다.
+```javascript
+<script>
+var simplemde = new SimpleMDE();
+</script>
+```
+그리고 위의 코드를 textarea 태그 주변에 적당히 적어주면, 아주 예쁜 마크다운 에디터가 화면에 생긴다.
+[WYSIWYG](https://ko.wikipedia.org/wiki/위지위그)이고 미리보기 등의 편의기능이 많다.
