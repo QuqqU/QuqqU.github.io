@@ -1,7 +1,7 @@
 ---
 title: QuqqU - SQL 단련하기
 description: SQL 단련하기
-header: HackerRank에서 SQL 단련하
+header: HackerRank에서 SQL 단련하기
 duration: 1 minutes read
 ---
 
