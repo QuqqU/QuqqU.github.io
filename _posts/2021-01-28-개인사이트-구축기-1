@@ -1,0 +1,12 @@
+---
+title: QuqqU - 개인사이트 구축기 1
+description: 
+header: 개인사이트 구축기 1 - git login 좀 그만 하자!
+duration: 1 minutes read
+---
+
+### 아래 명령어치고 로그인 한번 하자. 그 다음부터는 안해도 된다.
+
+```
+git config credential.helper store
+```
