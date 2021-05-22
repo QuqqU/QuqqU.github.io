@@ -1,21 +1,131 @@
----
-layout: default
----
-<!-- Posts -->
-<div id="posts">
+<!DOCTYPE HTML>
+<html>
 
-	{% for post in paginator.posts %}
+    <head>
+        <script>
+	    
+const __n = 16
+const __inf = 1e8
+let position = Array(__n).fill([])
+let edge = Array.from(Array(__n), () => new Array(__n).fill(0))
+let dp = Array.from(Array(__n), () => new Array(1 << __n).fill(__inf))
+let line = []
 
-	  <div class="post">
-	  	<h2><a href="{% if site.baseurl == "/" %}{{ post.url }}{% else %}{{ post.url | prepend: site.baseurl }}{% endif %}">{%if post.header %}{{ post.header }}{% else %}{{ post.title }}{% endif %}</a></h2>
-      <div class="by-line parent">
-        <time datetime="{{ post.date | date_to_xmlschema }}"> <i>{{ post.date | date_to_string }}</i> </time>
-        &nbsp;&nbsp; &middot; &nbsp;&nbsp;
-        <span><i>{{ post.duration }}</i> </span>
-      </div>
-      <p>{{ post.content | strip_html | truncatewords:50 }}</p>
-	  </div>
+position[0] = [150, 150] // [x-axis, y-axis
+for (let i = 1; i < __n; i++) {
+    position[i] = [rand(0, 300), rand(0, 300)]
+}
+for (let i = 0; i < __n; i++) {
+    for (let j = 0; j < __n; j++) {
+        edge[i][j] = dist(position[i], position[j])
+    }
+}
 
-    {% endfor %}
+function tsp(curr, visited) {
+    if (visited == (1 << __n) - 1) {
+        dp[curr][visited] = edge[curr][0]
+        return edge[curr][0]
+    }
+    if (dp[curr][visited] != __inf)
+        return dp[curr][visited]
 
-</div>
+    let rlt = __inf
+
+    for (let i = 0; i < __n; i++) {
+        if (!(visited & (1 << i))) {
+            rlt = Math.min(rlt, tsp(i, visited | 1 << i) + edge[curr][i])
+        }
+    }
+    dp[curr][visited] = rlt
+    return dp[curr][visited]
+}
+
+function path(curr, visited) {
+    console.log(curr);
+    //if (visited == ((1 << __n) - 1)) return
+    for (let i = 0; i < __n; i++) {
+        if (i == curr) continue;
+
+        if (dp[curr][visited] == dp[i][visited | (1 << i)] + edge[curr][i]) {
+
+            line.push([curr, i])
+            console.log(i, visited | (1 << i))
+            path(i, visited | (1 << i))
+            if (curr == 0) line.push([line[0][0], line[__n - 2][1]])
+            return
+        }
+    }
+}
+
+
+function dist(a, b) {
+    let rlt = (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1])
+    rlt = Math.sqrt(rlt)
+    return rlt
+}
+
+function rand(min, max) {
+    return Math.random() * (max - min + 1) + min;
+}
+
+function draw() {
+    const shortest = tsp(0, 1)
+    path(0, 1);
+    let div_short = document.createElement('div');
+    div_short.style = "position: fixed; bottom: 10px; left: 10px;";
+    let div_dist = document.createTextNode(`Shortest Travel : ${shortest}`);
+    div_short.appendChild(div_dist);
+    document.body.appendChild(div_short);
+
+    var canvas = document.getElementById("cvs");
+    var ctx = canvas.getContext("2d");
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+
+    for (let i = 0; i < __n; i++) {
+        ctx.beginPath();
+        ctx.moveTo(
+            position[line[i][0]][0] / 300 * ctx.canvas.width,
+            position[line[i][0]][1] / 300 * ctx.canvas.height
+        );
+        ctx.lineTo(
+            position[line[i][1]][0] / 300 * ctx.canvas.width,
+            position[line[i][1]][1] / 300 * ctx.canvas.height
+        );
+        ctx.stroke();
+    }
+
+    for (let i = 0; i < __n; i++) {
+        if (i == 0) ctx.fillStyle = 'red';
+        else ctx.fillStyle = 'black';
+        ctx.beginPath()
+        ctx.arc(
+            position[i][0] / 300 * ctx.canvas.width,
+            position[i][1] / 300 * ctx.canvas.height,
+            6,
+            0,
+            Math.PI * 2
+        );
+        ctx.closePath();
+        ctx.fill();
+        // ctx.fillRect(position[i][0] / 300 * ctx.canvas.width - 6, position[i][1] / 300 * ctx.canvas.height - 6, 12, 12);
+    }
+
+
+}
+</script>
+        <style>
+		html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+	</style>
+    </head>
+
+    <body onLoad="draw()">
+        <canvas id="cvs"></canvas>
+    </body>
+
+</html>
