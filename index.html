@@ -78,9 +78,9 @@ function draw() {
     document.body.appendChild(div_short);
 
     var canvas = document.getElementById("cvs");
-    var ctx = canvas.getContext("2d");
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    var x = Math.min(window.innerWidth, window.innerHeight)
+    ctx.canvas.width = x;
+    ctx.canvas.height = x;
 
     for (let i = 0; i < __n; i++) {
         ctx.beginPath();
@@ -120,6 +120,19 @@ function draw() {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: black;
+}
+
+div {
+    color: white;
+}
+
+canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
 }
 	</style>
     </head>
