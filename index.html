@@ -76,6 +76,30 @@ function draw() {
     ctx.canvas.height = x;
 
 
+    ctx.strokeStyle = "green";
+    ctx.beginPath();
+    ctx.moveTo(
+        0 / 300 * ctx.canvas.width,
+        150 / 300 * ctx.canvas.height
+    );
+    ctx.lineTo(
+        300 / 300 * ctx.canvas.width,
+        150 / 300 * ctx.canvas.height
+    );
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(
+        150 / 300 * ctx.canvas.width,
+        0 / 300 * ctx.canvas.height
+    );
+    ctx.lineTo(
+        150 / 300 * ctx.canvas.width,
+        300 / 300 * ctx.canvas.height
+    );
+    ctx.stroke();
+    ctx.strokeStyle = "black";
+
     for (let i = 1; i < __n; i++) {
         pos[i] = [rand(0, 300), rand(0, 300)]
     }
@@ -219,28 +243,6 @@ function draw() {
 
     }
 
-    ctx.strokeStyle = "green";
-    ctx.beginPath();
-    ctx.moveTo(
-        0 / 300 * ctx.canvas.width,
-        150 / 300 * ctx.canvas.height
-    );
-    ctx.lineTo(
-        300 / 300 * ctx.canvas.width,
-        150 / 300 * ctx.canvas.height
-    );
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(
-        150 / 300 * ctx.canvas.width,
-        0 / 300 * ctx.canvas.height
-    );
-    ctx.lineTo(
-        150 / 300 * ctx.canvas.width,
-        300 / 300 * ctx.canvas.height
-    );
-    ctx.stroke();
 
     let div_short = document.createElement('div');
     div_short.style = "position: fixed; bottom: 30px; left: 10px;";
@@ -251,6 +253,7 @@ function draw() {
 
 
 }
+
 </script>
         <style>
 		html, body {
