@@ -3,25 +3,23 @@
 
     <head>
         <script>
-const __n = 16
+	    
+const __n = 10
 const __inf = 1e8
+let pos = Array(__n).fill([])
+
 let position = Array(__n).fill([])
 let edge = Array.from(Array(__n), () => new Array(__n).fill(0))
 let dp = Array.from(Array(__n), () => new Array(1 << __n).fill(__inf))
 let line = []
 
-position[0] = [150, 150] // [x-axis, y-axis
-for (let i = 1; i < __n; i++) {
-    position[i] = [rand(0, 300), rand(0, 300)]
-}
-for (let i = 0; i < __n; i++) {
-    for (let j = 0; j < __n; j++) {
-        edge[i][j] = dist(position[i], position[j])
-    }
-}
 
-function tsp(curr, visited) {
-    if (visited == (1 << __n) - 1) {
+
+
+
+function tsp(curr, visited, cnt) {
+    console.log(curr, visited, cnt)
+    if (visited == (1 << cnt) - 1) {
         dp[curr][visited] = edge[curr][0]
         return edge[curr][0]
     }
@@ -30,27 +28,28 @@ function tsp(curr, visited) {
 
     let rlt = __inf
 
-    for (let i = 0; i < __n; i++) {
+    for (let i = 0; i < cnt; i++) {
         if (!(visited & (1 << i))) {
-            rlt = Math.min(rlt, tsp(i, visited | 1 << i) + edge[curr][i])
+            rlt = Math.min(rlt, tsp(i, visited | 1 << i, cnt) + edge[curr][i])
         }
     }
     dp[curr][visited] = rlt
     return dp[curr][visited]
 }
 
-function path(curr, visited) {
-    console.log(curr);
+function path(curr, visited, cnt) {
+    console.log(curr, visited, cnt)
+    //console.log(curr);
     //if (visited == ((1 << __n) - 1)) return
-    for (let i = 0; i < __n; i++) {
+    for (let i = 0; i < cnt; i++) {
         if (i == curr) continue;
 
         if (dp[curr][visited] == dp[i][visited | (1 << i)] + edge[curr][i]) {
 
             line.push([curr, i])
-            console.log(i, visited | (1 << i))
-            path(i, visited | (1 << i))
-            if (curr == 0) line.push([line[0][0], line[__n - 2][1]])
+            //console.log(i, visited | (1 << i))
+            path(i, visited | (1 << i), cnt)
+            if (curr == 0) line.push([line[0][0], line[cnt - 2][1]])
             return
         }
     }
@@ -68,53 +67,193 @@ function rand(min, max) {
 }
 
 function draw() {
-    const shortest = tsp(0, 1)
-    path(0, 1);
-    let div_short = document.createElement('div');
-    div_short.style = "position: fixed; bottom: 10px; left: 10px;";
-    let div_dist = document.createTextNode(`Shortest Travel : ${shortest}`);
-    div_short.appendChild(div_dist);
-    document.body.appendChild(div_short);
+    let sum = 0
 
-    var canvas = document.getElementById("cvs");
-    var ctx = canvas.getContext("2d");
-    var x = Math.min(window.innerWidth, window.innerHeight)
+    let canvas = document.getElementById("cvs");
+    let ctx = canvas.getContext("2d");
+    let x = Math.min(window.innerWidth, window.innerHeight)
     ctx.canvas.width = x;
     ctx.canvas.height = x;
 
-    for (let i = 0; i < __n; i++) {
-        ctx.beginPath();
-        ctx.moveTo(
-            position[line[i][0]][0] / 300 * ctx.canvas.width,
-            position[line[i][0]][1] / 300 * ctx.canvas.height
-        );
-        ctx.lineTo(
-            position[line[i][1]][0] / 300 * ctx.canvas.width,
-            position[line[i][1]][1] / 300 * ctx.canvas.height
-        );
-        ctx.stroke();
+
+    for (let i = 1; i < __n; i++) {
+        pos[i] = [rand(0, 300), rand(0, 300)]
     }
 
-    for (let i = 0; i < __n; i++) {
-        if (i == 0) ctx.fillStyle = 'red';
-        else ctx.fillStyle = 'black';
-        ctx.beginPath()
-        ctx.arc(
-            position[i][0] / 300 * ctx.canvas.width,
-            position[i][1] / 300 * ctx.canvas.height,
-            6,
-            0,
-            Math.PI * 2
-        );
-        ctx.closePath();
-        ctx.fill();
-        // ctx.fillRect(position[i][0] / 300 * ctx.canvas.width - 6, position[i][1] / 300 * ctx.canvas.height - 6, 12, 12);
+    for (let q = 0; q < 4; q++) {
+        position = Array(__n).fill([])
+        edge = Array.from(Array(__n), () => new Array(__n).fill(0))
+        dp = Array.from(Array(__n), () => new Array(1 << __n).fill(__inf))
+        line = []
+
+        position[0] = [150, 150] // [x-axis, y-axis]
+        let cnt = 1
+        if (q == 0) {
+            for (let i = 0; i < __n; i++) {
+                if (pos[i][0] < 150 && pos[i][1] < 150) {
+                    position[cnt++] = pos[i]
+                }
+            }
+        }
+        if (q == 1) {
+            for (let i = 0; i < __n; i++) {
+                if (pos[i][0] >= 150 && pos[i][1] < 150) {
+                    position[cnt++] = pos[i]
+                }
+            }
+        }
+        if (q == 2) {
+            for (let i = 0; i < __n; i++) {
+                if (pos[i][0] < 150 && pos[i][1] >= 150) {
+                    position[cnt++] = pos[i]
+                }
+            }
+        }
+        if (q == 3) {
+            for (let i = 0; i < __n; i++) {
+                if (pos[i][0] >= 150 && pos[i][1] >= 150) {
+                    position[cnt++] = pos[i]
+                }
+            }
+        }
+        if (cnt == 1) continue
+        if (cnt == 2) {
+            ctx.beginPath();
+            ctx.moveTo(
+                position[1][0] / 300 * ctx.canvas.width,
+                position[1][1] / 300 * ctx.canvas.height
+            );
+            ctx.lineTo(
+                position[0][0] / 300 * ctx.canvas.width,
+                position[0][1] / 300 * ctx.canvas.height
+            );
+            ctx.stroke();
+
+
+            ctx.fillStyle = 'red';
+            ctx.beginPath()
+            ctx.arc(
+                position[0][0] / 300 * ctx.canvas.width,
+                position[0][1] / 300 * ctx.canvas.height,
+                6,
+                0,
+                Math.PI * 2
+            );
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = 'black';
+            ctx.beginPath()
+            ctx.arc(
+                position[1][0] / 300 * ctx.canvas.width,
+                position[1][1] / 300 * ctx.canvas.height,
+                6,
+                0,
+                Math.PI * 2
+            );
+            ctx.closePath();
+            ctx.fill();
+
+            const shortest = dist(position[0], position[1])
+            let div_short = document.createElement('div');
+            if (q == 0) div_short.style = "position: fixed; top: 10px; left: 10px;";
+            if (q == 1) div_short.style = "position: fixed; top: 10px; right: 10px;";
+            if (q == 2) div_short.style = "position: fixed; bottom: 10px; left: 10px;";
+            if (q == 3) div_short.style = "position: fixed; bottom: 10px; right: 10px;";
+            let div_dist = document.createTextNode(`Shortest Travel : ${shortest}`);
+            div_short.appendChild(div_dist);
+            document.body.appendChild(div_short);
+
+            sum += shortest
+            continue;
+        }
+
+        for (let i = 0; i < cnt; i++) {
+            for (let j = 0; j < cnt; j++) {
+                edge[i][j] = dist(position[i], position[j])
+            }
+        }
+
+        const shortest = tsp(0, 1, cnt)
+        sum += shortest
+        path(0, 1, cnt);
+        let div_short = document.createElement('div');
+        if (q == 0) div_short.style = "position: fixed; top: 10px; left: 10px;";
+        if (q == 1) div_short.style = "position: fixed; top: 10px; right: 10px;";
+        if (q == 2) div_short.style = "position: fixed; bottom: 10px; left: 10px;";
+        if (q == 3) div_short.style = "position: fixed; bottom: 10px; right: 10px;";
+        let div_dist = document.createTextNode(`Shortest Travel : ${shortest}`);
+        div_short.appendChild(div_dist);
+        document.body.appendChild(div_short);
+
+
+        for (let i = 0; i < cnt; i++) {
+            ctx.beginPath();
+            ctx.moveTo(
+                position[line[i][0]][0] / 300 * ctx.canvas.width,
+                position[line[i][0]][1] / 300 * ctx.canvas.height
+            );
+            ctx.lineTo(
+                position[line[i][1]][0] / 300 * ctx.canvas.width,
+                position[line[i][1]][1] / 300 * ctx.canvas.height
+            );
+            ctx.stroke();
+        }
+
+        for (let i = 0; i < cnt; i++) {
+            if (i == 0) ctx.fillStyle = 'red';
+            else ctx.fillStyle = 'black';
+            ctx.beginPath()
+            ctx.arc(
+                position[i][0] / 300 * ctx.canvas.width,
+                position[i][1] / 300 * ctx.canvas.height,
+                6,
+                0,
+                Math.PI * 2
+            );
+            ctx.closePath();
+            ctx.fill();
+            // ctx.fillRect(position[i][0] / 300 * ctx.canvas.width - 6, position[i][1] / 300 * ctx.canvas.height - 6, 12, 12);
+        }
+
+
     }
+
+    ctx.strokeStyle = "green";
+    ctx.beginPath();
+    ctx.moveTo(
+        0 / 300 * ctx.canvas.width,
+        150 / 300 * ctx.canvas.height
+    );
+    ctx.lineTo(
+        300 / 300 * ctx.canvas.width,
+        150 / 300 * ctx.canvas.height
+    );
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(
+        150 / 300 * ctx.canvas.width,
+        0 / 300 * ctx.canvas.height
+    );
+    ctx.lineTo(
+        150 / 300 * ctx.canvas.width,
+        300 / 300 * ctx.canvas.height
+    );
+    ctx.stroke();
+
+    let div_short = document.createElement('div');
+    div_short.style = "position: fixed; bottom: 30px; left: 10px;";
+    let div_dist = document.createTextNode(`Total Travel : ${sum}`);
+    div_short.setAttribute("id", "total")
+    div_short.appendChild(div_dist);
+    document.body.appendChild(div_short);
 
 
 }
 </script>
-	    <style>html, body {
+        <style>
+		html, body {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -123,6 +262,10 @@ function draw() {
 }
 
 div {
+    color: red;
+}
+
+div#total {
     color: white;
 }
 
@@ -132,7 +275,8 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
-}</style>
+}
+	    </style>
     </head>
 
     <body onLoad="draw()">
