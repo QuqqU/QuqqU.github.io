@@ -178,7 +178,7 @@ function draw() {
             ctx.closePath();
             ctx.fill();
 
-            const shortest = dist(position[0], position[1])
+            const shortest = dist(position[0], position[1]) * 2
             let div_short = document.createElement('div');
             if (q == 0) div_short.style = "position: fixed; top: 10px; left: 10px;";
             if (q == 1) div_short.style = "position: fixed; top: 10px; right: 10px;";
